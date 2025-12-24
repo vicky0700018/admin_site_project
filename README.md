@@ -1,11 +1,29 @@
+# Admin Site Project
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Project Overview
+
+A complete admin dashboard built using Laravel 11, Bootstrap, and PostgreSQL, featuring comprehensive user management with Admin and SubAdmin roles. The system provides secure authentication, role-based access control, and efficient CRUD operations for leads and documents. It includes soft deletes for data integrity, RESTful API design, and responsive UI. Built with Eloquent ORM, migrations, seeders, and modern web technologies for scalable administrative management.
+
+## Features
+
+- **Multi-tier User Management**: Admin and SubAdmin role-based access control
+- **Lead Management**: Create, read, update, and delete leads with complete tracking
+- **Document Management**: Upload and manage documents associated with leads
+- **Authentication System**: Secure login and logout functionality with session management
+- **Database**: PostgreSQL with migrations and seeders for initialization
+- **Asset Bundling**: Vite for modern JavaScript and CSS processing
+- **Soft Deletes**: Non-permanent deletion with data recovery capabilities
+
+## Technology Stack
+
+- **Framework**: Laravel 11
+- **Database**: PostgreSQL
+- **Frontend**: Blade templates, Vite
+- **Authentication**: Laravel built-in authentication
+- **ORM**: Eloquent
+- **Seeding**: Database seeding with factories
 
 ## About Laravel
 
