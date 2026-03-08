@@ -296,6 +296,44 @@
                             </div>
                         </div>
 
+                        <div class="row">
+                            <!-- Status -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <i class="fas fa-flag"></i>
+                                        Lead Status
+                                    </label>
+                                    <select name="status" class="form-select">
+                                        <option value="">-- Select Status --</option>
+                                        @foreach($statuses as $key => $label)
+                                            <option value="{{ $key }}" {{ old('status', $lead->status) === $key ? 'selected' : '' }}>
+                                                {{ $label }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Assigned To -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <i class="fas fa-user-tie"></i>
+                                        Assign To
+                                    </label>
+                                    <select name="assigned_to" class="form-select">
+                                        <option value="">-- Unassigned --</option>
+                                        @foreach($subadmins as $subadmin)
+                                            <option value="{{ $subadmin->id }}" {{ old('assigned_to', $lead->assigned_to) == $subadmin->id ? 'selected' : '' }}>
+                                                {{ $subadmin->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Form Actions -->
                         <div class="form-actions">
                             <a href="{{ route('subadmin.leads.index') }}" class="btn btn-secondary">
