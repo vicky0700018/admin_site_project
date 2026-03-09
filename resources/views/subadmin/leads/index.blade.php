@@ -459,6 +459,44 @@
     </a>
 </div>
 
+<!-- Search & Filter Section -->
+<div style="background: white; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+    <form method="GET" action="{{ route('subadmin.leads.index') }}" class="row g-3">
+        <div class="col-md-3">
+            <input type="text" name="search" class="form-control" placeholder="Search name, email, mobile..." 
+                   value="{{ request('search') }}" />
+        </div>
+        <div class="col-md-3">
+            <select name="status" class="form-select">
+                <option value="">All Status</option>
+                @foreach($statuses as $key => $label)
+                    <option value="{{ $key }}" {{ request('status') === $key ? 'selected' : '' }}>
+                        {{ $label }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select name="assigned_to" class="form-select">
+                <option value="">Unassigned</option>
+                @foreach($subadmins as $subadmin)
+                    <option value="{{ $subadmin->id }}" {{ request('assigned_to') == $subadmin->id ? 'selected' : '' }}>
+                        {{ $subadmin->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="fas fa-search me-2"></i>Filter
+            </button>
+            <a href="{{ route('subadmin.leads.index') }}" class="btn btn-secondary w-100 mt-2">
+                <i class="fas fa-redo me-2"></i>Reset
+            </a>
+        </div>
+    </form>
+</div>
+
 <!-- Success Alert -->
 @if(session('success'))
     <div class="alert-enhanced alert-dismissible fade show" role="alert">
@@ -486,6 +524,8 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Mobile</th>
+                    <th>Status</th>
+                    <th>Assigned</th>
                     <th>DOB</th>
                     <th>Gender</th>
                     <th>Date Added</th>
@@ -513,6 +553,18 @@
                         <td>
                             <i class="fas fa-phone text-muted me-2"></i>
                             {{ $lead->mobile }}
+                        </td>
+                        <td>
+                            <span class="badge bg-{{ $lead->status === 'new' ? 'info' : ($lead->status === 'in_progress' ? 'warning' : ($lead->status === 'completed' ? 'success' : 'danger')) }}">
+                                {{ $statuses[$lead->status] ?? 'Unknown' }}
+                            </span>
+                        </td>
+                        <td>
+                            @if($lead->assignedTo)
+                                <span class="badge bg-secondary">{{ $lead->assignedTo->name }}</span>
+                            @else
+                                <span class="badge bg-light text-dark">Unassigned</span>
+                            @endif
                         </td>
                         <td>
                             @if($lead->dob)
@@ -572,7 +624,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="8">
+                        <td colspan="9">
                             <div class="empty-state">
                                 <i class="fas fa-users empty-state-icon"></i>
                                 <h4>No Leads Found</h4>
