@@ -6,10 +6,17 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\LeadDocumentController;
+use App\Http\Controllers\ActivityLogController;
+use App\Services\DashboardAnalyticsService;
 
 
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
 Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
+
+// Default login route - redirects to admin login
+Route::get('/login', function () {
+    return redirect()->route('admin.login');
+})->name('login');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/create-subadmin', [AdminController::class, 'show_create_subadmin_form'])
@@ -29,25 +36,31 @@ Route::middleware(['auth'])->group(function () {
 // Admin routes
 Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
+        $analytics = DashboardAnalyticsService::getAdminDashboardData();
+        return view('admin.dashboard', $analytics);
     })->name('admin.dashboard')->middleware('is_admin');
+    
+    Route::get('/admin/activity-logs', [ActivityLogController::class, 'index'])->name('admin.activity-logs');
 });
 
-Route::middleware(['auth', 'is_subadmin'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/subadmin/dashboard', function () {
-        return view('subadmin.dashboard');
+        $analytics = DashboardAnalyticsService::getSubadminDashboardData();
+        return view('subadmin.dashboard', $analytics);
     })->name('subadmin.dashboard');
 });
 
 
-Route::middleware(['auth', 'is_subadmin'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/subadmin/leads/create', [LeadController::class, 'create'])->name('subadmin.leads.create');
     Route::post('/subadmin/leads', [LeadController::class, 'store'])->name('subadmin.leads.store');
 
     Route::get('/subadmin/leads/{lead}/edit', [LeadController::class, 'edit'])->name('subadmin.leads.edit');
-    Route::post('/subadmin/leads/{lead}', [LeadController::class, 'update'])->name('subadmin.leads.update'); // better use PUT
+    Route::post('/subadmin/leads/{lead}', [LeadController::class, 'update'])->name('subadmin.leads.update');
+    Route::patch('/subadmin/leads/{lead}/status', [LeadController::class, 'updateStatus'])->name('subadmin.leads.updateStatus');
+    Route::patch('/subadmin/leads/{lead}/assign', [LeadController::class, 'assign'])->name('subadmin.leads.assign');
 
-    Route::get('/subadmin/leads/{lead}', [LeadController::class, 'show'])->name('subadmin.leads.show'); // ✅ GET instead of POST
+    Route::get('/subadmin/leads/{lead}', [LeadController::class, 'show'])->name('subadmin.leads.show');
 
     Route::delete('/subadmin/leads/{lead}', [LeadController::class, 'destroy'])->name('subadmin.leads.destroy');
 });
